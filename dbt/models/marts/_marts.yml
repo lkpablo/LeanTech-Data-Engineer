@@ -2,21 +2,39 @@ version: 2
 
 models:
   - name: dim_customers
+    description: One row per customer, latest version received. Invalid attributes are NULL and listed in data_quality_issues.
     config:
       contract: {enforced: true}
+      meta:
+        owner: data-team
+        domain: sales
+        sensitivity: confidential
+        freshness_sla: 24h
     columns:
       - name: customer_id
+        description: Customer identifier from the source system.
         data_type: number(38,0)
         constraints:
           - type: not_null
           - type: primary_key
         data_tests: [unique]
       - name: name
+        description: Full name. NULL when the source sent it empty.
         data_type: varchar
+        config:
+          meta: {sensitivity: pii}
       - name: email
+        description: Lower-case email. NULL when missing or malformed in the source.
         data_type: varchar
+        config:
+          meta: {sensitivity: pii}
       - name: country
+        description: ISO 3166-1 alpha-3 code, mapped from the source country name. NULL when unknown.
         data_type: varchar(3)
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [ARG, BRA, CAN, CHL, COL, DEU, ESP, FRA, GBR, MEX, PER, USA]
 
   - name: dim_products
     config:
@@ -53,16 +71,24 @@ models:
         data_type: number(2,0)
 
   - name: fact_sales
+    description: One row per sales transaction. Only valid sales; rejected ones are in data_quality_issues.
     config:
       contract: {enforced: true}
+      meta:
+        owner: data-team
+        domain: sales
+        sensitivity: internal
+        freshness_sla: 24h
     columns:
       - name: transaction_id
+        description: Transaction identifier from the source system.
         data_type: number(38,0)
         constraints:
           - type: not_null
           - type: primary_key
         data_tests: [unique]
       - name: date_key
+        description: Sale date.
         data_type: date
         constraints:
           - type: not_null
@@ -73,6 +99,7 @@ models:
           - relationships:
               arguments: {to: ref('dim_dates'), field: date_key}
       - name: customer_id
+        description: Buyer, references dim_customers.
         data_type: number(38,0)
         constraints:
           - type: not_null
@@ -83,6 +110,7 @@ models:
           - relationships:
               arguments: {to: ref('dim_customers'), field: customer_id}
       - name: product_id
+        description: Product sold, references dim_products.
         data_type: number(38,0)
         constraints:
           - type: not_null
@@ -93,6 +121,7 @@ models:
           - relationships:
               arguments: {to: ref('dim_products'), field: product_id}
       - name: amount
+        description: Sale amount as charged, zero or positive. Additive across every dimension.
         data_type: number(12,2)
         constraints:
           - type: not_null

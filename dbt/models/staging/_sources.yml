@@ -4,6 +4,11 @@ sources:
   - name: raw
     description: CSV files loaded as they arrive by pipeline/load_raw.py. Every column is VARCHAR.
     schema: RAW
+    config:
+      loaded_at_field: _LOADED_AT
+      freshness:
+        warn_after: {count: 24, period: hour}
+        error_after: {count: 48, period: hour}
     tables:
       - name: customers
       - name: products
