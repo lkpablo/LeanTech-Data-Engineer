@@ -1,0 +1,17 @@
+﻿.env
+.secrets/
+.venv/
+__pycache__/
+*.pyc
+
+# dbt
+target/
+dbt_packages/
+logs/
+
+# terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
