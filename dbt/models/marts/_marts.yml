@@ -1,0 +1,98 @@
+version: 2
+
+models:
+  - name: dim_customers
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: customer_id
+        data_type: number(38,0)
+        constraints:
+          - type: not_null
+          - type: primary_key
+        data_tests: [unique]
+      - name: name
+        data_type: varchar
+      - name: email
+        data_type: varchar
+      - name: country
+        data_type: varchar(3)
+
+  - name: dim_products
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: product_id
+        data_type: number(38,0)
+        constraints:
+          - type: not_null
+          - type: primary_key
+        data_tests: [unique]
+      - name: product_name
+        data_type: varchar
+      - name: category
+        data_type: varchar
+      - name: price
+        data_type: number(12,2)
+
+  - name: dim_dates
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: date_key
+        data_type: date
+        constraints:
+          - type: not_null
+          - type: primary_key
+        data_tests: [unique]
+      - name: year
+        data_type: number(4,0)
+      - name: month
+        data_type: number(2,0)
+      - name: day
+        data_type: number(2,0)
+
+  - name: fact_sales
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: transaction_id
+        data_type: number(38,0)
+        constraints:
+          - type: not_null
+          - type: primary_key
+        data_tests: [unique]
+      - name: date_key
+        data_type: date
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('dim_dates')
+            to_columns: [date_key]
+        data_tests:
+          - relationships:
+              arguments: {to: ref('dim_dates'), field: date_key}
+      - name: customer_id
+        data_type: number(38,0)
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('dim_customers')
+            to_columns: [customer_id]
+        data_tests:
+          - relationships:
+              arguments: {to: ref('dim_customers'), field: customer_id}
+      - name: product_id
+        data_type: number(38,0)
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('dim_products')
+            to_columns: [product_id]
+        data_tests:
+          - relationships:
+              arguments: {to: ref('dim_products'), field: product_id}
+      - name: amount
+        data_type: number(12,2)
+        constraints:
+          - type: not_null
