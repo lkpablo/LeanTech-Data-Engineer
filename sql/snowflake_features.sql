@@ -1,4 +1,5 @@
 
+CREATE SCHEMA IF NOT EXISTS SALES_DW.SCRATCH;
 USE SCHEMA SALES_DW.SCRATCH;
 
 ------------------------------------------ Cloning --------------------------------
