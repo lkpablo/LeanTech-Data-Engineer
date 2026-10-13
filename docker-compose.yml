@@ -1,0 +1,15 @@
+# Airflow in standalone mode: scheduler, API server and UI in one container, for local use.
+# UI at http://localhost:8080 (no login: local development only).
+services:
+  airflow:
+    build: .
+    command: standalone
+    env_file: .env
+    environment:
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/project/dags
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "true"
+    volumes:
+      - .:/opt/project
+    ports:
+      - "8080:8080"

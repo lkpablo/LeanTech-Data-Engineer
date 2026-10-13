@@ -1,0 +1,3 @@
+# The image only needs requirements.txt: never send credentials or the local venv to Docker.
+*
+!requirements.txt
