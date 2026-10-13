@@ -24,7 +24,7 @@ python setup/generate_keys.py
 ```
 Writes the private key to `.secrets/` (ignored by git) and prints the public key.
 
-**3. Snowflake objects.** In Snowsight, open a SQL file, paste `setup/snowflake_setup.sql`, replace `<RSA_PUBLIC_KEY>` with the printed public key and run it with **Run All**, so every statement runs. It creates the warehouse `LEANTECH_WH`, the database `SALES_DW`, the role `LEANTECH_PIPELINE` and the service user `SVC_LEANTECH`. It is the only manual step: it creates the user everything else connects with, and it needs `ACCOUNTADMIN`.
+**3. Snowflake objects.** In Snowsight, open a SQL file, paste `setup/snowflake_setup.sql`, replace `<RSA_PUBLIC_KEY>` with the printed public key and run it with **Run All**, so every statement runs. It creates the warehouse `LEANTECH_WH`, the database `SALES_DW`, the role `LEANTECH_PIPELINE` and the service user `SVC_LEANTECH`. It is the only manual step: it creates the user everything else connects with, and it needs `ACCOUNTADMIN`. The same objects are defined as code in `terraform/` (section 5 of `SOLUTION.md`).
 
 **4. Configuration.** Copy `.env.example` to `.env` and set `SNOWFLAKE_ACCOUNT` to your account identifier (Snowsight: your user menu → Account → Copy account identifier).
 
@@ -87,4 +87,5 @@ pipeline/   connection and raw load
 dbt/        staging and marts models, seed, tests, metadata, data product README
 sql/        SQL answers (sections 1, 2.3, 2.4)
 dags/       Airflow DAG
+terraform/  Snowflake account objects as code
 ```

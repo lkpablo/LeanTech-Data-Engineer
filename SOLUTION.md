@@ -329,6 +329,32 @@ The metadata is executed, not just read: every `dbt build` runs the rules and fa
 
 `dbt/README.md` documents the sales data product: purpose, consumers, sources, refresh, dependencies, model, data quality, known limitations, example queries, and how to change it safely: build into a zero-copy clone first, let contracts and tests catch breaking changes, and compare `data_quality_issues` before and after.
 
+## 5. Infrastructure as Code
+
+Files: `terraform/main.tf`, `terraform/variables.tf`, `terraform/outputs.tf`, `terraform/.terraform.lock.hcl`.
+
+**What it manages.** The account-level objects that `setup/snowflake_setup.sql` creates by hand: the warehouse, the database, the pipeline role, its grants and the service user with its public key. As code they are reviewed before they change and recreated identically in another environment. Only Snowflake: planning GCP resources needs a real project, which this repository does not have; the landing bucket of section 3 would be one more resource here.
+
+**Terraform vs the pipeline.** Terraform owns what exists in the account (warehouses, databases, roles, grants, users, storage integrations, buckets and IAM). dbt owns schemas, tables and views. The pipeline owns the data. Each object has exactly one owner, so they never fight over it.
+
+- **Variables:** account, admin user, key paths, environment and warehouse size. Account and keys come from `TF_VAR_*` environment variables, never from a file in the repository.
+
+- **Outputs:** the names created, which are the values for `.env`.
+
+- **Environments:** every object is prefixed with the environment (`DEV_`, `PROD_`), validated to `dev` or `prod`, and each environment has its own state.
+
+- **State:** in a GCS bucket with versioning and locking (the backend block in `main.tf`), one prefix per environment. It is never committed (`*.tfstate` is in `.gitignore`): it describes the whole account.
+
+- **Secrets:** the provider authenticates with a key pair read from a file path. The private key is not in the code or in the state; only the service user's public key is, which is not secret. The provider version is pinned by `.terraform.lock.hcl`.
+
+**Plan, review, test and apply safely.**
+1. A change is a pull request. CI runs `terraform fmt -check`, `terraform validate` and `terraform plan` for `dev`, and posts the plan on the pull request.
+2. A reviewer reads the plan, not only the code: it lists exactly what will be created, changed or destroyed. A destroy on a database or user is a stop sign.
+3. After merge, CI applies to `dev`; `prod` is applied from the same commit only after `dev` succeeds and with manual approval.
+4. Objects that already exist, like the ones created by the setup script, are brought into the state with `import` blocks before the first apply, never recreated.
+
+**Verified:** `terraform validate` passes and `terraform fmt -check` finds nothing to change. `terraform plan` against the account, with an empty state, lists 8 resources to create (`DEV_LEANTECH_WH`, `DEV_SALES_DW`, `DEV_LEANTECH_PIPELINE`, `DEV_SVC_LEANTECH` and four grants), 0 to change and 0 to destroy. It was not applied: the same objects already exist, created by the setup script.
+
 ## 6. Coding automation
 
 Files: `dags/sales_pipeline.py`, `Dockerfile`, `docker-compose.yml`, `.dockerignore`.
