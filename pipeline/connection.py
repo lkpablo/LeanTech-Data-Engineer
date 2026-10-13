@@ -1,8 +1,4 @@
-"""Snowflake connection for the pipeline, configured from .env (key-pair authentication).
 
-Usage (connection check):
-  python pipeline/connection.py
-"""
 import os
 from pathlib import Path
 

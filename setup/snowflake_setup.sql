@@ -10,14 +10,14 @@ CREATE WAREHOUSE IF NOT EXISTS LEANTECH_WH
 
 CREATE DATABASE IF NOT EXISTS SALES_DW;
 
----------------------------------------- Pipeline ----------------------------------------
+---------------------------------------- Permissions ----------------------------------------
 
 CREATE ROLE IF NOT EXISTS LEANTECH_PIPELINE;
 GRANT USAGE ON WAREHOUSE LEANTECH_WH TO ROLE LEANTECH_PIPELINE;
 GRANT OWNERSHIP ON DATABASE SALES_DW TO ROLE LEANTECH_PIPELINE COPY CURRENT GRANTS;
 GRANT ROLE LEANTECH_PIPELINE TO ROLE SYSADMIN;
 
--- Service user: no password, no Snowsight login, key-pair authentication only.
+-- key-pair authentication only.
 CREATE USER IF NOT EXISTS SVC_LEANTECH
     TYPE = SERVICE
     DEFAULT_ROLE = LEANTECH_PIPELINE
