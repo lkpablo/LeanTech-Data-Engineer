@@ -12,6 +12,7 @@ models:
       +schema: staging
     marts:
       +materialized: table
+      +transient: false   # permanent tables: Time Travel beyond 1 day and Fail-safe
 
 seeds:
   leantech_sales:
