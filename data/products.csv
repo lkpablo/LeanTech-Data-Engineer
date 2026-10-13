@@ -1,0 +1,51 @@
+ProductID,ProductName,Category,Price
+1,Headphones Basic,Electronics,166.36
+2,Headphones Pro,Electronics,277.30
+3,Keyboard Basic,Electronics,190.62
+4,Keyboard Pro,Electronics,17.89
+5,Monitor Basic,Electronics,118.80
+6,Monitor Pro,Electronics,
+7,Webcam Basic,Electronics,344.54
+8,Webcam Pro,Electronics,33.12
+9,Speaker Basic,Electronics,97.20
+10,Speaker Pro,Electronics,109.50
+11,Lamp Basic,Home,317.54
+12,Lamp Pro,Home,237.97
+13,Chair Basic,Home,322.54
+14,Chair Pro,Home,83.14
+15,Desk Basic,Home,50.34
+16,Desk Pro,Home,93.80
+17,Shelf Basic,Home,63.85
+18,Shelf Pro,Home,109.92
+19,Rug Basic,Home,61.18
+20,Rug Pro,Home,28.56
+21,Yoga Mat Basic,Sports,318.09
+22,Yoga Mat Pro,Sports,240.04
+23,Dumbbell Basic,,330.57
+24,Dumbbell Pro,Sports,368.87
+25,Bike Helmet Basic,Sports,178.47
+26,Bike Helmet Pro,Sports,190.14
+27,Water Bottle Basic,,125.12
+28,Water Bottle Pro,Sports,-15.00
+29,Running Belt Basic,Sports,112.54
+30,Running Belt Pro,Sports,218.29
+31,Novel Basic,Books,N/A
+32,Novel Pro,Books,
+33,Cookbook Basic,Books,356.32
+34,Cookbook Pro,Books,295.14
+35,Atlas Basic,Books,243.47
+36,Atlas Pro,Books,15.22
+37,Biography Basic,Books,95.43
+38,Biography Pro,Books,271.35
+39,Comic Basic,Books,344.90
+40,Comic Pro,Books,236.91
+41,Puzzle Basic,Toys,-120.50
+42,Puzzle Pro,Toys,307.08
+43,Board Game Basic,Toys,329.46
+44,Board Game Pro,Toys,232.62
+45,Robot Kit Basic,Toys,306.43
+46,Robot Kit Pro,Toys,74.20
+47,Building Set Basic,Toys,209.99
+48,Building Set Pro,Toys,179.68
+49,Plush Basic,Toys,114.87
+50,Plush Pro,Toys,398.79
